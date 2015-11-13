@@ -44,9 +44,14 @@ function makeOAuthGetAccessTokenUrl(code) {
     ].join('');
 }
 
-function makeUrl(url, type, limit) {
+
+
+
+
+function makeUrl(url, type, limit) {        //url = "https://api.github.com/users/caihanling", type = undefined, limit = 0
+
     limit = limit || 0;
-    var sec = '';
+    var sec = '';       //sec = "client_id=c45417c5d6249959a91d&client_secret=3630a057d4ebbbdbfc84f855376f3f46f58b9710"
     if (TYPE_REQUEST.checkOAuth || !ghcs.settings.access.token) {
         sec = [
             "client_id=",
@@ -331,7 +336,7 @@ function chUser(typeUser) {
                 if (!ghcs.users.hasOwnProperty(login) || !ghcs.users[login].hasOwnProperty("repos")) {
 
                     ldrTop.show();
-                    JSONP(makeUrl("https://api.github.com/" + typeUser + "/" + login), function (req) {
+                    JSONP(makeUrl("https://api.github.com/" + typeUser + "/" + login), function (req) {     //->jsonp.js
                         var data = getDataFromRequest(req);
                         if (!data) {
                             parseRepos(null);
@@ -355,7 +360,7 @@ function chUser(typeUser) {
 
                         if (data.repos_url)
                             JSONP(makeUrl(data.repos_url, TYPE_REQUEST.repos), function getAll(req) {
-                                parseRepos(getDataFromRequest(req));
+                                parseRepos(getDataFromRequest(req));        //画图
                                 getNext(req, function(next) {
                                     if (next) {
                                         ldrTop.show();
@@ -380,10 +385,10 @@ function chUser(typeUser) {
                     ghcs.states.max = ghcs.users[login].repos ? ghcs.users[login].repos.length : 0;
                     parseRepos(ghcs.users[login].repos);
                 }
-                divStat.updateInfo();
-                userTxt.enable();
+                divStat.updateInfo();       //<--从jsoup.js中返回，-->main.js  divStat = d3.select("#divStat");
+                userTxt.enable();       //<--从main.js中返回，--main.js  item.attr("disabled", null);
             }
-        }
+        }       //-->main.js  ghcs.redrawStatsTimer = setTimeout(function () {
     })(userTxt.property("value")), 300);
 }
 

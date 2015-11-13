@@ -104,7 +104,7 @@
 
         toolTip.hide();
     };
-    vis.clRepo = function(d) {
+        vis.clRepo = function(d) {
         if (d3.event && d3.event.defaultPrevented)
             return;
 
@@ -191,19 +191,19 @@
 
         vis.forceRep = vis.forceRep || d3.layout.force()
             .size([w, h])
-            .friction(.99)
-            .gravity(.005)
-            .charge(function(d) { return -vis.forceRep.radius(vis.forceRep.rad(d)) / 2; })
-            .on("tick", tick)
+            .friction(.99)      //定义摩擦系数的函数
+            .gravity(.005)      //设定的中心产生重力
+            .charge(function(d) { return -vis.forceRep.radius(vis.forceRep.rad(d)) / 2; })      //设定顶点的电荷数。该参数决定是排斥还是吸引，+为吸引，-为排斥
+            .on("tick", tick)       //tick事件监听，可以基于力的布局计算结果更新所有的circle元素位置
         ;
 
         vis.forceRep.dateNow = Date.now();
         vis.forceRep.rad = vis.forceRep.rad || function (d) {
-            return d.nodeValue.cdate;
+            return d.nodeValue.cdate;       //date parse(create date)
         };
 
         vis.forceRep.radO = vis.forceRep.radO || function (d) {
-            return d.nodeValue.date - vis.forceRep.dateNow;
+            return d.nodeValue.date - vis.forceRep.dateNow;     // date parse(push||update date) - now
         };
 
         data = data.sort(function(a, b) { return a.nodeValue.date - b.nodeValue.date; });
@@ -218,9 +218,9 @@
 
         data.length == 1 && vis.forceRep.radius.domain([vis.forceRep.radius.domain()[0] - 1, vis.forceRep.radius.domain()[1]]);
 
-        (vis.forceRep.opt || (vis.forceRep.opt = d3.scale.log().range([.01,.9])))
+        (vis.forceRep.opt || (vis.forceRep.opt = d3.scale.log().range([.01,.9])))       //创建对数函数
             .domain(
-                d3.extent(data, vis.forceRep.radO)
+                d3.extent(data, vis.forceRep.radO)      //extend获取范围，最大值和最小值
 //                    [d3.min(data, vis.forceRep.radO), vis.forceRep.dateNow]
             );
         vis.forceRep.colors = vis.reposColors || (vis.reposColors = d3.scale.category20());

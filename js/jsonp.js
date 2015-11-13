@@ -23,13 +23,13 @@
      *      charset : ''
      *}
      */
-    window.JSONP = window.JSONP || function(uri, callback, params) {
-        if (!arguments.length || arguments.length < 2)
+    window.JSONP = window.JSONP || function(uri, callback, params) {        //uri = "https://api.github.com/users/caihanling?client_id=c45417c5d6249959a91d&client_secret=3630a057d4ebbbdbfc84f855376f3f46f58b9710", callback =
+        if (!arguments.length || arguments.length < 2)      //arguments = ["https://api.github.com/users/caihanling?client_id=…t_secret=3630a057d4ebbbdbfc84f855376f3f46f58b9710", function, Object]
             return;
 
-        uri = uri || '';
-        callback = callback || function() {};
-        params = params || {};
+        uri = uri || '';        //uri = "https://api.github.com/users/caihanling?client_id=c45417c5d6249959a91d&client_secret=3630a057d4ebbbdbfc84f855376f3f46f58b9710
+        callback = callback || function() {};       //callback = function(req)
+        params = params || {};      //params = Object {callbackParam: "callback"}
 
         params.callbackParam = params.callbackParam || 'callback'
 
@@ -37,11 +37,11 @@
 
         function clear() {
             try {
-                delete window[id];
+                delete window[id];      //id = "_JSONP_0"
             } catch(e) {
                 window[id] = null;
             }
-            document.documentElement.removeChild(script);
+            document.documentElement.removeChild(script);       //script = script
         }
 
         function response() {
@@ -58,18 +58,18 @@
             params.onload && params.onload.apply(this, arguments);
         }
 
-        var id = '_JSONP_' + seq++,
+        var id = '_JSONP_' + seq++,     //id = "_JSONP_0"
             script = document.createElement('script');
 
         window[id] = response;
 
-        params.script_order = params.script_order || 'async';
+        params.script_order = params.script_order || 'async';       //params = Object {callbackParam: "callback", script_order: "async"}
 
         script.onload = doLoad;
         script.onerror = doError;
         script.setAttribute('charset', params.charset || 'UTF-8');
         script.setAttribute(params.script_order, params.script_order);
-        script.setAttribute('src', uri + params.callbackParam + '=' + id);
+        script.setAttribute('src', uri + params.callbackParam + '=' + id);      //uri = "https://api.github.com/users/caihanling?client_id=c45417c5d6249959a91d&client_secret=3630a057d4ebbbdbfc84f855376f3f46f58b9710&", id = "_JS
 
         document.documentElement.insertBefore(
             script,

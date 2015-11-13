@@ -111,7 +111,7 @@ function gaEventSend(category, action, label, value) {
     if (!ga || !sendEvent || sendEventCategory.indexOf(category) < 0)
         return;
 
-    ga("send", 'event', {
+    ga("send", 'event', {       //事件追踪
         'eventCategory': category,
         'eventAction': action,
         'eventLabel': label
@@ -142,7 +142,7 @@ var cs, svg_cs, svg,
     w, h, stackLoad = 0,
     psBar, runBtn, ldrTop, toolTip, showBtn,
     visBtn, visBtnRestart, visBtnStop, visBtnPause,
-    repoList,
+    repoList,showBtn,
     userTxt, curRep, divStat, stepsBar,
     cbDlr, cbDlsr, cbDlvml,
     criticalError;
@@ -190,7 +190,7 @@ function rewriteHash() {
             ghcs.params.rot && hash.push("rot=" + ghcs.params.rot);
             break;
     }
-    document.location.hash = "#" + hash.join("&");
+    document.location.hash = "#" + hash.join("&");      //获取url里的值
 }
 
 function applyParams() {
@@ -236,7 +236,7 @@ function applyParams() {
 
     stackLoad = stackLoad-- < 1 ? 0 : stackLoad;
 
-    d3.select("#misc").classed("open", !ghcs.params.user);
+    d3.select("#misc").classed("open", !ghcs.params.user);      //右侧说明框
     d3.select("#example").classed("open", !ghcs.params.user);
 
     !ghcs.params.user && asyncLoad();
@@ -255,7 +255,7 @@ function applyParams() {
         if (ghcs.params.repo)
             stackLoad++;
 
-        chUser();
+        chUser();       //stst
     }
     else if (ghcs.user && ghcs.user.repos) {
         var r;
@@ -290,7 +290,7 @@ function applyParams() {
     }
 }
 
-function nextStepApplyParams() {
+function nextStepApplyParams() {        //***
     if (stackLoad)
         applyParams();
     else if (ghcs.localStorage.get("run") != undefined) {
@@ -366,7 +366,7 @@ function checkCompleted() {
     return false;
 }
 
-function redrawStats() {
+function redrawStats() {        //*************************统计曲线图
     if (ghcs.redrawStatsTimer) {
         clearTimeout(ghcs.redrawStatsTimer);
         ghcs.redrawStatsTimer = null;
@@ -393,7 +393,7 @@ function runShow() {
     }
 }
 
-function redrawRepos() {
+function redrawRepos() {        //画图*************************
     if (ghcs.redrawReposTimer) {
         clearTimeout(ghcs.redrawReposTimer);
         ghcs.redrawReposTimer = null;
@@ -880,10 +880,10 @@ function init() {
         return stepsBar;
     };
 
-    runBtn = d3.select("#runBtn");
-    showBtn = d3.select("#showBtn");
-    visBtn = d3.select("#visBtn");
-    userTxt = d3.select("#user").on("change", function() {
+    runBtn = d3.select("#runBtn");    //analyze button
+    showBtn = d3.select("#showBtn");   //github username show
+    visBtn = d3.select("#visBtn");    //动画run button
+    userTxt = d3.select("#user").on("change", function() {     //github username change
         stepsBar.firstStep();
         showBtn.disable();
         if (this.value) {
@@ -907,7 +907,7 @@ function init() {
         };
     });
 
-    visBtnRestart = d3.select("#visBtnRestart").on('click', function() {
+    visBtnRestart = d3.select("#visBtnRestart").on('click', function() {    //动画restart
         GAEvent.Show.Restart(getUserRepo());
         vis.stopShow();
         visBtnRestart.hide();
@@ -925,8 +925,8 @@ function init() {
         visBtn.show();
     }
 
-    visBtnPause = d3.select("#visBtnPause").on('click', pauseShow);
-    visBtnStop = d3.select("#visBtnStop").on('click', function() {
+    visBtnPause = d3.select("#visBtnPause").on('click', pauseShow);         //动画pause
+    visBtnStop = d3.select("#visBtnStop").on('click', function() {          //动画stop
         GAEvent.Show.Stop(getUserRepo());
         vis.stopShow();
         visBtnRestart.show();
@@ -958,12 +958,12 @@ function init() {
         else
             runShow();
     }
-    visBtn.on('click', startShow);
+    visBtn.on('click', startShow);   //点击动画run
 
-    runBtn.on("click", rewriteHash);
-    showBtn.on("click", rewriteHash);
+    runBtn.on("click", rewriteHash);   //analyze点击
+    showBtn.on("click", rewriteHash);    //github username点击
 
-    ldrTop = d3.select("#ldrTop");
+    ldrTop = d3.select("#ldrTop");      //github缓冲图标
     ldrTop.pntNode = d3.select(ldrTop.node().parentNode);
     ldrTop.show = function () {
         ldrTop.pntNode.style("display", null);
@@ -984,7 +984,7 @@ function init() {
         return toolTip;
     };
 
-    cbDlr = d3.select("#cb-dlr").datum("repo");
+    cbDlr = d3.select("#cb-dlr").datum("repo");     //checkbox
     cbDlsr = d3.select("#cb-dlsr").datum("stat");
     cbDlvml = d3.select("#cb-dlvml").datum("show");
 
@@ -1011,9 +1011,9 @@ function init() {
             ghcs.params.climit = ghcs.limits.commits;
     });
 
-    initGraphics(svg);
+    initGraphics(svg);      //init
 
-    curRep = d3.select("#curRep")
+    curRep = d3.select("#curRep")   //analyzs下拉框
         .on("mouseover", repoItemOver)
         .on("mouseout", repoItemOut);
 
@@ -1045,7 +1045,7 @@ function init() {
     };
 
     divStat = d3.select("#divStat");
-    divStat.updateInfo = function() {
+    divStat.updateInfo = function() {       // //<--从github.js中返回,user = undefined
         var user;
         if (ghcs.login && (user = ghcs.user = ghcs.users[ghcs.login]) && user.info) {
             if (user.repos) {
@@ -1109,11 +1109,11 @@ function init() {
                         });
                 })
         }
-    };
+    };      //-->github,js  userTxt.enable();
 
     d3.select("#about").classed("open", true);
 
-    d3.select("#getOAuth").on('click', function() {
+    d3.select("#getOAuth").on('click', function() {     //private access
         if(!ghcs.settings.access.token) {
             GAEvent.Access.SignIn('Github');
             if (window.oauthWindow) {
@@ -1140,5 +1140,5 @@ function init() {
         }
     });
 
-    applyParams();
+    applyParams();      //??
 }
